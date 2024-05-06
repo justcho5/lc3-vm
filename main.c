@@ -145,20 +145,13 @@ int main(int argc, const char* argv[]){
                 @{NOT}
                 break;
             case OP_BR:
-                uint16_t pc_offset9 = instr & 0x1FF;
-                bool n_flag = (instr >> 11) & 0x1;
-                bool z_flag = (instr >> 10) & 0x1;
-                bool p_flag = (instr >> 9) & 0x1;
-                uint16_t last_result_sign = reg[R_COND];
-                
-                if ((n && last_result_sign == FL_NEG) || (z && last_result_sign == FL_ZRO) || (p && last_result_sign == FL_POS))
+                uint16_t pc_offset9 = sign_extend(instr & 0x1FF, 9);
+                uint16_t cond_flag = (instr >> 9) & 0x7
+
+                if (cond_flag & reg[R_COND])
                 {
                     reg[PC_START] += pc_offset9;
                 }
-
-
-
-                if 
                 break;
             case OP_JMP:
                 @{JMP}
@@ -173,8 +166,8 @@ int main(int argc, const char* argv[]){
                 uint16_t pc_offset9 = instr & 0x1FF;
                 uint16_t memory_address = sign_extend(pc_offset9, 9) + reg[R_PC];
                 uint16_t data_address = mem_read(memory_address);
-                reg[dr] = mem_read(data_address)
-                update_flags(dr)
+                reg[dr] = mem_read(data_address);
+                update_flags(dr);
         
                 break;
             case OP_LDR:
@@ -196,7 +189,9 @@ int main(int argc, const char* argv[]){
                 @{TRAP}
                 break;
             case OP_RES:
+                abort();
             case OP_RTI:
+                abort();
             default:
                 @{BAD OPCODE}
                 break;
