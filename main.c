@@ -53,9 +53,9 @@ enum
 
 enum
 {
-    FL_POS = 1 << 0, /* P */
-    FL_ZRO = 1 << 1, /* Z */
-    FL_NEG = 1 << 2, /* N */
+    FL_POS = 1 << 0, /* P */ 
+    FL_ZRO = 1 << 1, /* Z */ 
+    FL_NEG = 1 << 2, /* N */ 
 };
 
 uint16_t sign_extend(uint16_t x, int bit_count)
@@ -145,7 +145,20 @@ int main(int argc, const char* argv[]){
                 @{NOT}
                 break;
             case OP_BR:
-                @{BR}
+                uint16_t pc_offset9 = instr & 0x1FF;
+                bool n_flag = (instr >> 11) & 0x1;
+                bool z_flag = (instr >> 10) & 0x1;
+                bool p_flag = (instr >> 9) & 0x1;
+                uint16_t last_result_sign = reg[R_COND];
+                
+                if ((n && last_result_sign == FL_NEG) || (z && last_result_sign == FL_ZRO) || (p && last_result_sign == FL_POS))
+                {
+                    reg[PC_START] += pc_offset9;
+                }
+
+
+
+                if 
                 break;
             case OP_JMP:
                 @{JMP}
